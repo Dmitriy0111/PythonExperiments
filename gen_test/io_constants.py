@@ -7,3 +7,8 @@ class Dir(Enum):
 class M_S(Enum):
     slave = 0
     master = 1
+
+class IO_type(Enum):
+    logic = 0
+    wire = 1
+    reg  = 2

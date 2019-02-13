@@ -14,7 +14,7 @@ class interface(io):
             count = count + 1
             last = 1 if count == len(self.ports) else 0
             port.print_info(last)
-    def print_dec(self):
+    def print_dec(self,size1=0, param1 = False, size2 = 0, max2 = 0):
         print("    // " + self.name)
         for port in self.ports:
-            port.print_dec()
+            port.print_dec(size1,param1, size2, max2)

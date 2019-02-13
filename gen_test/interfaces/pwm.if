@@ -1,0 +1,4 @@
+__PWM__
+pwm_clk   , logic , 1 , input  , master ,// PWM clock input
+pwm_reset , logic , 1 , input  , master ,// PWM reset input
+pwm       , logic , 1 , output , master ,// PWM output signal

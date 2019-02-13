@@ -1,0 +1,11 @@
+__AHB__
+haddr  , logic , 32 , output , master ,// AHB - Master HADDR
+hwdata , logic , 32 , output , master ,// AHB - Master HWDATA
+hrdata , logic , 32 , input  , master ,// AHB - Master HRDATA
+hwrite , logic , 1  , output , master ,// AHB - Master HWRITE
+htrans , logic , 2  , output , master ,// AHB - Master HTRANS
+hsize  , logic , 3  , output , master ,// AHB - Master HSIZE
+hburst , logic , 3  , output , master ,// AHB - Master HBURST
+hresp  , logic , 2  , input  , master ,// AHB - Master HRESP
+hready , logic , 1  , input  , master ,// AHB - Master HREADYOUT
+hsel   , logic , 1  , output , master ,// AHB - Master HSEL
