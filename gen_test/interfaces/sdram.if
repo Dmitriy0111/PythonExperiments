@@ -1,0 +1,11 @@
+__SDRAM__
+SDRAM_ADDR  , logic , R_S , output , master ,// SDRAM ADDR 
+SDRAM_BA    , logic , B_S , output , master ,// SDRAM BA   
+SDRAM_CAS_N , logic , 1   , output , master ,// SDRAM CAS_N
+SDRAM_CKE   , logic , 1   , output , master ,// SDRAM CKE  
+SDRAM_CLK   , logic , 1   , output , master ,// SDRAM CLK  
+SDRAM_CS_N  , logic , 1   , output , master ,// SDRAM CS_N 
+SDRAM_DQ    , wire  , D_S , inout  , master ,// SDRAM DQ   
+SDRAM_DQM   , logic , 2   , output , master ,// SDRAM DQM  
+SDRAM_RAS_N , logic , 1   , output , master ,// SDRAM RAS_N
+SDRAM_WE_N  , logic , 1   , output , master ,// SDRAM WE_N 

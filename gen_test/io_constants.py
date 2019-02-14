@@ -3,6 +3,7 @@ from enum import Enum
 class Dir(Enum):
     input = 0
     output = 1
+    inout = 2
 
 class M_S(Enum):
     slave = 0

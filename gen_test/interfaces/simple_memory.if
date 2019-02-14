@@ -1,0 +1,7 @@
+__SIMPLE_MEMORY__
+addr    , logic , 32 , output , master ,// address memory
+rd      , logic , 32 , input  , master ,// read memory
+wd      , logic , 32 , output , master ,// write memory
+we      , logic , 1  , output , master ,// write enable signal
+req     , logic , 1  , output , master ,// request memory signal
+req_ack , logic , 1  , input  , master ,// request acknowledge memory signal

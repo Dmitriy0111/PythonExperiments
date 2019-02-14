@@ -12,7 +12,7 @@ class io():
         self.comment    = comment
     def print_io(self, last, size1 = 0, param1 = False, size2 = 0, max2 = 0):
         return str("    %-6s  %-5s   [%-s%s : 0]%s%s%s%s" %(
-                                                                        "input" if ( ( self.direction == Dir.input ) ^ (self.master == M_S.slave) ) else "output",
+                                                                        "inout" if ( self.direction == Dir.inout ) else ( "input" if ( ( self.direction == Dir.input ) ^ (self.master == M_S.slave) ) else "output" ),
                                                                         self.type.name, 
                                                                         (int(self.width)-1) if str(self.width).isdigit() else self.width + "-1",
                                                                         " " * ( size1 - len( str( int(self.width)-1 ) if str(self.width).isdigit() else self.width) + ( 2 if str(self.width).isdigit() & param1 else 0 ) ),
@@ -23,7 +23,7 @@ class io():
                                                                     )
                 )
     def print_dec(self, size1 = 0, param1 = False, size2 = 0, max2 = 0):
-        print   ("    %-5s   [%-s%s : 0]%s%-s%s    %s"      %(
+        return str("    %-5s   [%-s%s : 0]%s%-s%s    %s\n"      %(
                                                                     self.type.name, 
                                                                     (int(self.width)-1) if str(self.width).isdigit() else self.width + "-1", 
                                                                     " " * ( size1 - len( str( int(self.width)-1 ) if str(self.width).isdigit() else self.width) + ( 2 if str(self.width).isdigit() & param1 else 0 ) ),
@@ -33,7 +33,13 @@ class io():
                                                                     self.comment
                                                                 )
                 )
-    def connect_0(self, connecting_name):
-        return str("        .%-23s( %-14s)," %(self.name, connecting_name))
+    def connect_0(self, connecting_name, size1 = 0):
+        return str  ("        .%-s%s( %-s%s),"  %(
+                                                    self.name, 
+                                                    " " * (size1-len(self.name)),
+                                                    connecting_name,
+                                                    " " * (size1-len(connecting_name))
+                                                )
+                    )
     def connect(self, connecting_name, i):
         return str("        .%-23s( %-9s [%d] )," %(self.name, connecting_name, i))
