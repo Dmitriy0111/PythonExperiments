@@ -14,7 +14,9 @@ class interface(io):
             count = count + 1
             last = 1 if count == len(self.ports) else 0
             port.print_info(last)
-    def print_dec(self, file_name, size1=0, param1 = False, size2 = 0, max2 = 0):
-        file_name.write(str("    // " + self.comment + "\n"))
+    # print port list
+    def print_pl(self, file_name, size1=0, param1 = False, size2 = 0, max2 = 0):
+        if self.comment != "":
+            file_name.write(str("    // " + self.comment + "\n"))
         for port in self.ports:
-            file_name.write(port.print_dec( size1,param1, size2, max2))
+            file_name.write(port.print_p( size1,param1, size2, max2))

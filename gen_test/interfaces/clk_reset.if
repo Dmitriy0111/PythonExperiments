@@ -1,3 +1,3 @@
 __CLK_RESET__
-hclk    , logic , 1 , output , slave ,// hclk  
-hresetn , logic , 1 , output , slave ,// hresetn
+clk    , logic , 1 , output ,// {{}}clk
+resetn , logic , 1 , output ,// {{}}resetn

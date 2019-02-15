@@ -3,14 +3,15 @@ from io_constants import Dir
 from io_constants import IO_type
 
 class io():
-    def __init__(self, name, type, width, direction, master, comment):
+    def __init__(self, name, type, width, direction, comment, master):
         self.name       = name
         self.type       = type
         self.width      = width
         self.direction  = direction
-        self.master     = master
         self.comment    = comment
-    def print_io(self, last, size1 = 0, param1 = False, size2 = 0, max2 = 0):
+        self.master     = master
+    # print port declaration
+    def print_dec(self, last, size1 = 0, param1 = False, size2 = 0, max2 = 0):
         return str("    %-6s  %-5s   [%-s%s : 0]%s%s%s%s" %(
                                                                         "inout" if ( self.direction == Dir.inout ) else ( "input" if ( ( self.direction == Dir.input ) ^ (self.master == M_S.slave) ) else "output" ),
                                                                         self.type.name, 
@@ -22,7 +23,8 @@ class io():
                                                                         self.comment
                                                                     )
                 )
-    def print_dec(self, size1 = 0, param1 = False, size2 = 0, max2 = 0):
+    # print port
+    def print_p(self, size1 = 0, param1 = False, size2 = 0, max2 = 0):
         return str("    %-5s   [%-s%s : 0]%s%-s%s    %s\n"      %(
                                                                     self.type.name, 
                                                                     (int(self.width)-1) if str(self.width).isdigit() else self.width + "-1", 
@@ -33,12 +35,14 @@ class io():
                                                                     self.comment
                                                                 )
                 )
-    def connect_0(self, connecting_name, size1 = 0):
-        return str  ("        .%-s%s( %-s%s),"  %(
+    # print connect with the same
+    def print_con(self, last, connecting_name, size1 = 0):
+        return str  ("        .%-s%s( %-s%s)%s"  %(
                                                     self.name, 
-                                                    " " * (size1-len(self.name)),
+                                                    " " * ( size1 - len(self.name)),
                                                     connecting_name,
-                                                    " " * (size1-len(connecting_name))
+                                                    " " * ( size1 - len(connecting_name) ),
+                                                    "" if last else ","
                                                 )
                     )
     def connect(self, connecting_name, i):

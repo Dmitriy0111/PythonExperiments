@@ -15,9 +15,10 @@ class io_module(interface):
                 param = True if ( str(port.width).isdigit() == False ) | (param == True) else False
                 max2 = len(port.name) if len(port.name) > max2 else max2
         return max1 , param , max2
-    def print(self):
+    # print port list
+    def print_pl(self):
         size1 , param1, max2 = self.find_max_lenght() 
-        size2 =  ( 2 if param1 else 0 )
+        size2 = ( 2 if param1 else 0 )
         size2_ = 0
         max2_ = 0
         while size2_-1 < size2:
@@ -28,21 +29,29 @@ class io_module(interface):
         count = 0
         file_name = open(self.name+"_pl"+".sv","w")
         for interface_ in self.interfaces:
-            interface_.print_dec(file_name, size1, param1, size2, max2)
+            interface_.print_pl(file_name, size1, param1, size2_, max2)
         file_name.close()
     def connect(self):
         size1 , param1, max2 = self.find_max_lenght()
         max2 = max2 + 5
+        count = 0
+
+        for interface_ in self.interfaces:
+            count += len(interface_.ports)
         file_name = open(self.name+"_con"+".sv","w")
         file_name.write( str( "    // Creating one %s" %(self.interfaces[0].name+self.interfaces[0].suffix+("_0" if self.interfaces[0].suffix == "" else "") ) )+"\n" )
         file_name.write( str( "    %s %s" %(self.interfaces[0].name, self.interfaces[0].name+"_0") )+"\n" )
         file_name.write( "    (" +"\n" )
+        i = 0
         for interface_ in self.interfaces:
-            file_name.write( str( "        // %s" %interface_.comment )+"\n" )
+            if interface_.comment != "":
+                file_name.write( str( "        // %s" %interface_.comment )+"\n" )
             for port in interface_.ports:
-                file_name.write( port.connect_0(port.name,max2) +"\n" )
+                i = i + 1
+                file_name.write( port.print_con(0 if i != count else 1, port.name,max2) +"\n" )
         file_name.write( "    );" +"\n" )
         file_name.close()
+    # print module declaration
     def module_dec(self):
         size1 , param1, max2 = self.find_max_lenght() 
         size2 = size1 + 6 + ( 2 if param1 else 0 )
@@ -76,10 +85,11 @@ class io_module(interface):
             file_name.write( "(" +"\n" )
         i = 0
         for interface_ in self.interfaces:
-            file_name.write( str("    // %s" %interface_.comment ) + "\n" )
+            if interface_.comment != "":
+                file_name.write( str("    // %s" %interface_.comment ) + "\n" )
             for port in interface_.ports:
                 i = i + 1
-                file_name.write(port.print_io(0 if i != count else 1, size1, param1, size2_,max2_) + "\n")
+                file_name.write(port.print_dec(0 if i != count else 1, size1, param1, size2_,max2_) + "\n")
         file_name.write( ");" +"\n" )
         file_name.write( "" +"\n" )
         file_name.write( str("endmodule : %s" %(self.interfaces[0].name) ) + "\n" )

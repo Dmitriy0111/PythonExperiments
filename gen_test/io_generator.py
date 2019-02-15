@@ -24,24 +24,6 @@ for param in sys.argv:
     if param == "con":
         con = 1
 
-def connect(AHB_list, AHB_master):
-    print("    // Creating one %s" %(AHB_master.name+AHB_master.suffix+("_0" if AHB_master.suffix == "" else "")))
-    print("    %s %s" %(AHB_master.name, AHB_master.name+"_0"))
-    print("    (")
-    for port in AHB_master.ports:
-        print(port.connect_0(port.name))
-    print("    );")
-    s=0
-    for AHB_list_ in AHB_list:
-        print("    // Creating one %s" %(AHB_list_.name+AHB_list_.suffix+("_0" if AHB_list_.suffix == "" else "")))
-        print("    %s %s" %(AHB_list_.name, AHB_list_.name+AHB_list_.suffix+("_0" if AHB_list_.suffix == "" else "")))
-        print("    (")
-        i=0
-        for port in AHB_list_.ports:
-            print(port.connect(AHB_master.ports[i].name,s))
-            i = i + 1
-        s = s + 1
-        print("    );")
 # project dirs
 modules_dir = "../gen_test/modules"
 interfaces_dir = "../gen_test/interfaces"
@@ -51,10 +33,10 @@ os.makedirs(output_dir, exist_ok=True)
 # read file names in module folder
 module_f = [f for f in listdir(modules_dir) if isfile(join(modules_dir, f))]
 
-j = 0
-
 module_list = []
 module = []
+mod_param = []
+mod_small_comment = []
 
 for module_f_ in module_f:
     file = open( modules_dir + "/" + module_f_ , 'r' )
@@ -62,11 +44,28 @@ for module_f_ in module_f:
         help_s = file.readline()
         if help_s == "" :
             break
+        if help_s.count("__PARAM__") :
+            while True:
+                help_s = file.readline()
+                if help_s.count("__PORTS__") :
+                    break
+                mod_param.append( help_s.replace("\n", "") )
+            break
+    while True:
+        help_s = file.readline()
+        if help_s == "" :
+            break
         help_s = help_s.rsplit(",")
-        module.append( [help_s[0],help_s[1].replace(" ",""),help_s[2].replace("\n","")] )
-    module_list.append([module_f_.replace(".mod",""),copy.deepcopy(module)])
+        module.append( [help_s[0],copy.deepcopy(help_s[1].replace(" ","")),copy.deepcopy(help_s[2].replace(" ","")),help_s[5].replace("\n",""),copy.deepcopy(help_s[4].replace(" ",""))] )
+        mod_small_comment.append(help_s[3].replace(" ",""))
+    module_list.append([module_f_.replace(".mod",""),copy.deepcopy(module),copy.deepcopy(mod_small_comment),copy.deepcopy(mod_param)])
     file.close()
     module.clear()
+    mod_param.clear()
+    mod_small_comment.clear()
+
+#for module_list_ in module_list:
+#   print(module_list_[1][2])
 # read interface names in interface folder
 interface_f = [f for f in listdir(interfaces_dir) if isfile(join(interfaces_dir, f))]
 
@@ -88,28 +87,33 @@ for module_list_ in module_list:
                     type_io = IO_type.logic if type_io == "logic" else ( IO_type.wire if type_io == "wire" else ( ( IO_type.reg if type_io == "reg" else "error")))
                     dir_io  = pars[3].replace(" ","")
                     dir_io  = Dir.output if dir_io == "output" else ( Dir.input if dir_io == "input" else ( Dir.inout if dir_io == "inout" else "error"))
-                    M_S_io  = pars[4].replace(" ","")
+                    M_S_io  = module_[4].replace(" ", "")
                     M_S_io  = M_S.master if M_S_io == "master" else ( M_S.slave if M_S_io == "slave" else "error")
-                    if_.append(io(pars[0].replace(" ",""),type_io,pars[2].replace(" ",""),dir_io,M_S_io, pars[5].replace("\n","")))
+                    #print(M_S_io)
+                    if_.append(io(pars[0].replace(" ",""),type_io,pars[2].replace(" ",""),dir_io, pars[4].replace("\n",""),M_S_io))
                 file.close()
                 mod_ifs_.append(copy.deepcopy(if_))
     j = 0
     for mod_ifs__ in mod_ifs_:
-        mod_if_common.append(interface(mod_ifs__ , module_list_[0] , "" ,  module_list_[1][j][2] ))
+        mod_if_common.append(interface(mod_ifs__ , module_list_[0] , "" ,  module_list_[1][j][3] ))
         j = j + 1
     j = 0
     for mod_ifs__ in mod_ifs_:
         for ports in mod_ifs__:
-            ports.name = ports.name + module_list_[1][j][1]
+            preffix = module_list_[1][j][1]
+            suffix  = module_list_[1][j][2]
+            ports.name = preffix + ports.name + suffix
+            ports.comment=ports.comment.replace("{{}}",module_list_[2][j])
         j = j + 1
 
-    param_ = ["gpio_w = `NF_GPIO_WIDTH", "pwm_width = 8" ]
-
-    nf_ahb_gpio_0_ = io_module(output_dir+module_list_[0],mod_if_common,param_)
-    #generate files
+    nf_ahb_gpio_0_ = io_module(output_dir+module_list_[0],mod_if_common,module_list_[3])
+    # generate files
+    # module declaration
     if dec:
         nf_ahb_gpio_0_.module_dec()
+    # port declaration
     if pl:
-        nf_ahb_gpio_0_.print()
+        nf_ahb_gpio_0_.print_pl()
+    # module connection
     if con:
         nf_ahb_gpio_0_.connect()

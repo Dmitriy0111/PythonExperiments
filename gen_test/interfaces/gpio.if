@@ -1,4 +1,4 @@
 __GPIO__
-gpi , logic , gpio_w , input  , master ,// GPIO input
-gpo , logic , gpio_w , output , master ,// GPIO output
-gpd , logic , gpio_w , output , master ,// GPIO direction
+gpi , logic , gpio_w , input  ,// GPIO input
+gpo , logic , gpio_w , output ,// GPIO output
+gpd , logic , gpio_w , output ,// GPIO direction
