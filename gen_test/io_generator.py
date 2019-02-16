@@ -1,4 +1,4 @@
-# import
+#!/usr/bin/env python3
 from enum           import Enum
 from io_class       import io
 from io_constants   import M_S

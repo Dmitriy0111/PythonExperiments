@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from io_interface import interface
 
 class io_module(interface):
