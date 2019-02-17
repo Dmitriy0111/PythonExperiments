@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 from enum           import Enum
 from io_class       import io
-from io_constants   import M_S
-from io_constants   import Dir
-from io_constants   import IO_type
 from io_interface   import interface
 from io_module      import io_module
 from os             import listdir
@@ -84,12 +81,8 @@ for module_list_ in module_list:
                         break
                     pars = pars.rsplit(",")
                     type_io = pars[1].replace(" ","")
-                    type_io = IO_type.logic if type_io == "logic" else ( IO_type.wire if type_io == "wire" else ( ( IO_type.reg if type_io == "reg" else "error")))
                     dir_io  = pars[3].replace(" ","")
-                    dir_io  = Dir.output if dir_io == "output" else ( Dir.input if dir_io == "input" else ( Dir.inout if dir_io == "inout" else "error"))
                     M_S_io  = module_[4].replace(" ", "")
-                    M_S_io  = M_S.master if M_S_io == "master" else ( M_S.slave if M_S_io == "slave" else "error")
-                    #print(M_S_io)
                     if_.append(io(pars[0].replace(" ",""),type_io,pars[2].replace(" ",""),dir_io, pars[4].replace("\n",""),M_S_io))
                 file.close()
                 mod_ifs_.append(copy.deepcopy(if_))

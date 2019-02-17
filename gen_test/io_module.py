@@ -31,13 +31,15 @@ class io_module(interface):
         count = 0
         file_name = open(self.name+"_pl"+".sv","w")
         for interface_ in self.interfaces:
-            interface_.print_pl(file_name, size1, param1, size2_, max2)
+            interface_.print_pl(file_name, size1, param1, size2_, max2_)
         file_name.close()
     def connect(self):
         size1 , param1, max2 = self.find_max_lenght()
-        max2 = max2 + 5
+        max2 = max2
+        max2_ = 0
+        while max2_ - 3 < max2:
+            max2_ = max2_ + 4
         count = 0
-
         for interface_ in self.interfaces:
             count += len(interface_.ports)
         file_name = open(self.name+"_con"+".sv","w")
@@ -50,7 +52,7 @@ class io_module(interface):
                 file_name.write( str( "        // %s" %interface_.comment )+"\n" )
             for port in interface_.ports:
                 i = i + 1
-                file_name.write( port.print_con(0 if i != count else 1, port.name,max2) +"\n" )
+                file_name.write( port.print_con(0 if i != count else 1, port.name,max2_) +"\n" )
         file_name.write( "    );" +"\n" )
         file_name.close()
     # print module declaration
