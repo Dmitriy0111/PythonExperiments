@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 
 class io():
-    def __init__(self, name, type, width, direction, comment, master):
+    def __init__(self, name, type, width_f, direction, comment, master, width_s = ""):
         self.name       = name
         self.type       = type
-        self.width      = width
+        self.width_f    = width_f
         self.direction  = direction
         self.comment    = comment
         self.master     = master
+        self.width_s    = width_s
     # print port declaration
-    def print_dec(self, last, size1 = 0, param1 = False, size2 = 0, max2 = 0):
-        return str( "    {:<8s}{:<8s}[{:<{}s} : 0]{:s}{:<{}s}{:s}"
+    def print_dec(self, last, size1 = 0, param1 = False, size2 = 0, max2 = 0, size_s = 0, param_s = False, two_dim = False):
+        return str( "    {:<8s}{:<8s}{:<{}s}{:s}[{:<{}s} : 0]{:s}{:<{}s}{:s}"
                     .format (
                                 "inout" if ( self.direction == "inout" ) else ( "input" if ( ( self.direction == "input" ) ^ (self.master == "slave") ) else "output" ),
                                 self.type, 
-                                (str(int(self.width)-1)) if str(self.width).isdigit() else (self.width + "-1"),
+                                "" if two_dim == False else ( ( "[" + ( ( str( int( self.width_s ) - 1 ) ) if str( self.width_s ).isdigit() else ( self.width_s + "-1" ) ) ) if ( str(self.width_s) != "" ) else "   " ),
+                                0 if ( two_dim == False ) else ( size_s + ( 2 if param_s else 0 ) + ( 1 if two_dim else 0 ) ),
+                                "" if ( two_dim == False ) else (" : 0]" if ( str(self.width_s) != "" ) else "     "),
+                                ( str( int( self.width_f ) - 1 ) ) if str( self.width_f ).isdigit() else ( self.width_f + "-1" ),
                                 size1 + (2 if param1 else 0),
                                 " " * size2,
                                 self.name + ("" if last else ","),
@@ -27,7 +31,7 @@ class io():
         return str( "    {:<8s}[{:<{}s} : 0]{:s}{:<{}s}    {:s}\n"
                     .format(
                                 self.type, 
-                                (str(int(self.width)-1)) if str(self.width).isdigit() else self.width + "-1", 
+                                (str(int(self.width_f)-1)) if str(self.width_f).isdigit() else self.width_f + "-1", 
                                 size1 + (2 if param1 else 0),
                                 " " * size2,
                                 self.name + ";", 
@@ -46,5 +50,3 @@ class io():
                                 "" if last else ","
                             )
                     )
-    def connect(self, connecting_name, i):
-        return str("        .%-23s( %-9s [%d] )," %(self.name, connecting_name, i))

@@ -11,23 +11,29 @@ class io_module(interface):
         max1 = 0
         max2 = 0
         param = False
+        param_s = False
+        two_dim = False
+        size_s = 0
         for interface_ in self.interfaces:
             for port in interface_.ports:
-                max1 = len( str(int(port.width) - 1) if str(port.width).isdigit() else str(port.width) ) if max1 < len(str(int(port.width) - 1) if str(port.width).isdigit() else str(port.width)) else max1
-                param = True if ( str(port.width).isdigit() == False ) | (param == True) else False
-                max2 = len(port.name) if len(port.name) > max2 else max2
-        return max1 , param , max2
+                max1 = len( str(int(port.width_f) - 1) if str(port.width_f).isdigit() else str(port.width_f) ) if max1 < len(str(int(port.width_f) - 1) if str(port.width_f).isdigit() else str(port.width_f)) else max1
+                size_s = len( str(int(port.width_s) - 1) if str(port.width_s).isdigit() else str(port.width_s) ) if size_s < len(str(int(port.width_s) - 1) if str(port.width_s).isdigit() else str(port.width_s)) else size_s
+                param = True if ( str( port.width_f ).isdigit() == False ) | ( param == True ) else False
+                param_s = True if ( str( port.width_s ).isdigit() == False ) | ( param_s == True ) else False
+                two_dim = True if ( ( str( port.width_s ) != "" ) | ( two_dim == True ) ) else False
+                max2 = len( port.name ) if len( port.name ) > max2 else max2
+        return max1 , param , max2, size_s, param_s, two_dim
     # print port list
     def print_pl(self):
         size1 , param1, max2 = self.find_max_lenght() 
         size2 = ( 2 if param1 else 0 )
         size2_ = 0
         max2_ = 0
-        while size2_-1 < size2:
-            size2_ = size2_ + 4
+        while size2_ - 1 < size2:
+            size2_ += + 4
         size2_ = size2_ - size2
-        while max2_-1 < max2:
-            max2_ = max2_ + 4
+        while max2_ - 1 < max2:
+            max2_ += + 4
         count = 0
         file_name = open(self.name+"_pl"+".sv","w")
         for interface_ in self.interfaces:
@@ -57,17 +63,20 @@ class io_module(interface):
         file_name.close()
     # print module declaration
     def module_dec(self):
-        size1 , param1, max2 = self.find_max_lenght() 
+        size1 , param1, max2, size_s, param_s, two_dim = self.find_max_lenght() 
+        print(size_s)
+        print(param_s)
+        print(two_dim)
         size2 = size1 + 6 + ( 2 if param1 else 0 )
         size2_ = 0
         max2_ = 0
         while size2_-1 < size2:
-            size2_ = size2_ + 4
+            size2_ += + 4
         size2_ = size2_ - size2
         while max2_-1 < max2:
-            max2_ = max2_ + 4
-        count = 0
+            max2_ += + 4
 
+        count = 0
         for interface_ in self.interfaces:
             count += len(interface_.ports)
         i = 0
@@ -93,7 +102,7 @@ class io_module(interface):
                 file_name.write( str("    // %s" %interface_.comment ) + "\n" )
             for port in interface_.ports:
                 i = i + 1
-                file_name.write(port.print_dec(0 if i != count else 1, size1, param1, size2_,max2_) + "\n")
+                file_name.write(port.print_dec(0 if i != count else 1, size1, param1, size2_,max2_,size_s,param_s,two_dim) + "\n")
         file_name.write( ");" +"\n" )
         file_name.write( "" +"\n" )
         file_name.write( str("endmodule : %s" %(self.interfaces[0].name) ) + "\n" )

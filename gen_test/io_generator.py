@@ -53,8 +53,8 @@ for module_f_ in module_f:
         if help_s == "" :
             break
         help_s = help_s.rsplit(",")
-        module.append( [help_s[0],copy.deepcopy(help_s[1].replace(" ","")),copy.deepcopy(help_s[2].replace(" ","")),help_s[5].replace("\n",""),copy.deepcopy(help_s[4].replace(" ",""))] )
-        mod_small_comment.append(help_s[3].replace(" ",""))
+        module.append( [help_s[0],copy.deepcopy(help_s[1].replace(" ","")),copy.deepcopy(help_s[2].replace(" ","")),help_s[6].replace("\n",""),copy.deepcopy(help_s[5].replace(" ","")),help_s[3].replace(" ","")] )
+        mod_small_comment.append(help_s[4].replace(" ",""))
     module_list.append([module_f_.replace(".mod",""),copy.deepcopy(module),copy.deepcopy(mod_small_comment),copy.deepcopy(mod_param)])
     file.close()
     module.clear()
@@ -83,7 +83,7 @@ for module_list_ in module_list:
                     type_io = pars[1].replace(" ","")
                     dir_io  = pars[3].replace(" ","")
                     M_S_io  = module_[4].replace(" ", "")
-                    if_.append(io(pars[0].replace(" ",""),type_io,pars[2].replace(" ",""),dir_io, pars[4].replace("\n",""),M_S_io))
+                    if_.append(io(pars[0].replace(" ",""),type_io,pars[2].replace(" ",""),dir_io, pars[4].replace("\n",""),M_S_io,module_[5]))
                 file.close()
                 mod_ifs_.append(copy.deepcopy(if_))
     j = 0

@@ -8,17 +8,9 @@ class interface(io):
         self.name   = name
         self.suffix = suffix
         self.comment = comment
-    def print_info(self):
-        print(self.name)
-        count = 0
-        last = 0
-        for port in self.ports:
-            count = count + 1
-            last = 1 if count == len(self.ports) else 0
-            port.print_info(last)
     # print port list
-    def print_pl(self, file_name, size1=0, param1 = False, size2 = 0, max2 = 0):
+    def print_pl(self, file_name, size1 = 0, param1 = False, size2 = 0, max2 = 0):
         if self.comment != "":
-            file_name.write(str("    // " + self.comment + "\n"))
+            file_name.write( str("    // " + self.comment + "\n") )
         for port in self.ports:
-            file_name.write(port.print_p( size1,param1, size2, max2))
+            file_name.write( port.print_p( size1, param1, size2, max2 ) )
