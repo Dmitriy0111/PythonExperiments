@@ -14,7 +14,7 @@ ahb.if       , none_ , _i_4 ,         , slave  , slave  ,AHB slave side 4
 ahb.if       , none_ , _i_5 ,         , slave  , slave  ,AHB slave side 5
 ahb.if       , none_ , _i_6 ,         , slave  , slave  ,AHB slave side 6
 ahb.if       , none_ , _i_7 , 2       , slave  , slave  ,AHB slave side 7
-ahb.if       , arr_  , _s   , slave_c , slave  , slave  ,AHB slave side 7
+ahb.if       , arr_  , _s   , slave_c , slave  , slave  ,AHB slave side
 gpio.if      ,       , _a   ,         ,        , master ,GPIO side
 gpio.if      ,       , _b   ,         ,        , master ,GPIO side
 gpio.if      ,       , _c   ,         ,        , master ,GPIO side

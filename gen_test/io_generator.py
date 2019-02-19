@@ -89,7 +89,7 @@ for module_list_ in module_list:
     j = 0
     for mod_ifs__ in mod_ifs_:
         mod_if_common.append(interface(mod_ifs__ , module_list_[0] , "" ,  module_list_[1][j][3] ))
-        j = j + 1
+        j += 1
     j = 0
     for mod_ifs__ in mod_ifs_:
         for ports in mod_ifs__:
@@ -97,7 +97,7 @@ for module_list_ in module_list:
             suffix  = module_list_[1][j][2]
             ports.name = preffix + ports.name + suffix
             ports.comment=ports.comment.replace("{{}}",module_list_[2][j])
-        j = j + 1
+        j += 1
 
     nf_ahb_gpio_0_ = io_module(output_dir+module_list_[0],mod_if_common,module_list_[3])
     # generate files
