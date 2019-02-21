@@ -1,0 +1,6 @@
+__JTAG__
+tck   , logic , 1 , output ,// test clock
+trst  , logic , 1 , output ,// test reset
+tdi   , logic , 1 , output ,// test data input
+tdo   , logic , 1 , input  ,// test data output
+tms   , logic , 1 , output ,// test mode select
