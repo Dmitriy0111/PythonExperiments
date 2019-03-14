@@ -44,7 +44,6 @@ class io_module(interface):
             if interface_.comment != "":
                 file_name.write( str("    // " + interface_.comment + "\n") )
             for port in interface_.ports:
-                #file_name.write(port.print_p( size_f, param_f, size_space_e, size_name_e, size_s, param_s, two_dim ))
                 file_name.write(port.print_dec_pl( 0, size_f, param_f, size_space_e, size_name_e, size_s, param_s, two_dim, 0 ))
 
         file_name.close()
@@ -57,17 +56,17 @@ class io_module(interface):
         for interface_ in self.interfaces:
             count += len(interface_.ports)
         file_name = open(self.name+"_con"+".sv","w")
-        file_name.write( str( "    // Creating one %s" %(self.interfaces[0].name+self.interfaces[0].suffix+("_0" if self.interfaces[0].suffix == "" else "") ) )+"\n" )
-        file_name.write( str( "    %s %s" %(self.interfaces[0].name, self.interfaces[0].name+"_0") )+"\n" )
-        file_name.write( "    (" +"\n" )
+        file_name.write( str( "    // Creating one {:s}\n".format(self.interfaces[0].name+self.interfaces[0].suffix+("_0" if self.interfaces[0].suffix == "" else "") ) ) )
+        file_name.write( str( "    {:s} {:s}" .format(self.interfaces[0].name, self.interfaces[0].name+"_0") )+"\n" )
+        file_name.write( "    (\n" )
         i = 0
         for interface_ in self.interfaces:
             if interface_.comment != "":
-                file_name.write( str( "        // %s" %interface_.comment )+"\n" )
+                file_name.write( str( "        // {:s}\n".format( interface_.comment ) ) )
             for port in interface_.ports:
                 i += 1
                 file_name.write( port.print_con(0 if i != count else 1, port.name,size_name_e) +"\n" )
-        file_name.write( "    );" +"\n" )
+        file_name.write( "    );\n" )
         file_name.close()
     # print module declaration
     def module_dec(self):
@@ -77,33 +76,31 @@ class io_module(interface):
         count = 0
         for interface_ in self.interfaces:
             count += len(interface_.ports)
-        i = 0
+
         file_name = open(self.name+"_dec"+".sv","w")
-        file_name.write( str("module %s" %(self.interfaces[0].name) +"\n" ) )
+        file_name.write( str("module {:s}\n".format(self.interfaces[0].name) ) )
         if len(self.params) != 0:
-            file_name.write( "#(" +"\n" )
-            for param in self.params:
-                i += 1
-                file_name.write ( str( "    parameter%s%s%s"  %(
-                                                                    " " * (7 + size_space_e + size_space),
-                                                                    param,
-                                                                    "" if len(self.params) == i else ","
-                                                                )     
-                                    ) +"\n" 
+            file_name.write( "#(\n" )
+            for j in range(len(self.params)):
+                file_name.write ( str( "    parameter{:s}{:s}{:s}".format   (
+                                                                                " " * (7 + size_space_e + size_space),
+                                                                                self.params[j],
+                                                                                "" if len(self.params) - 1 == j else ","
+                                                                            )     
+                                     ) +"\n" 
                                 )
-            file_name.write( ")(" +"\n" )
+            file_name.write( ")(\n" )
         else:
-            file_name.write( "(" +"\n" )
+            file_name.write( "(\n" )
         i = 0
         for interface_ in self.interfaces:
             if interface_.comment != "":
-                file_name.write( str("    // %s" %interface_.comment ) + "\n" )
+                file_name.write( str("    // {:s}\n".format(interface_.comment ) ) )
             for port in interface_.ports:
                 i += 1
-                #file_name.write(port.print_dec(0 if i != count else 1, size_f, param_f, size_space_e,size_name_e,size_s,param_s,two_dim) )
                 file_name.write(port.print_dec_pl(0 if i != count else 1, size_f, param_f, size_space_e,size_name_e,size_s,param_s,two_dim,1) )
                 
-        file_name.write( ");" +"\n" )
-        file_name.write( "" +"\n" )
-        file_name.write( str("endmodule : %s" %(self.interfaces[0].name) ) + "\n" )
+        file_name.write( ");\n" )
+        file_name.write( "\n" )
+        file_name.write( str("endmodule : {:s}\n".format(self.interfaces[0].name) ) )
         file_name.close()
