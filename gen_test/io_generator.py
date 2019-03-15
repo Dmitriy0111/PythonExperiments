@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-from enum           import Enum
-from io_class       import io
-from io_interface   import interface
-from io_module      import io_module
+from io_mod.io_class        import io
+from io_mod.io_interface    import interface
+from io_mod.io_module       import module
 from os             import listdir
 from os.path        import isfile, join
 import os
@@ -45,7 +44,9 @@ for module_f_ in module_f:
                 help_s = file.readline()
                 if help_s.count("__PORTS__") :
                     break
-                mod_param.append( help_s.replace("\n", "") )
+                help_s = help_s[:-1]
+                help_s = help_s.rsplit(",")
+                mod_param.append( [ help_s[0].replace(" ", "") , help_s[1] ] )
             break
     while True:
         help_s = file.readline()
@@ -124,7 +125,7 @@ for module_list_dict_ in module_list_dict:
             ports.comment=ports.comment.replace("{{}}",module_list_dict_['mod_sc'][j])
         j += 1
 
-    nf_ahb_gpio_0_ = io_module(output_dir+module_list_dict_['mod_name'],mod_if_common,module_list_dict_['mod_param'])
+    nf_ahb_gpio_0_ = module(output_dir+module_list_dict_['mod_name'],mod_if_common,module_list_dict_['mod_param'])
     # generate files
     # module declaration
     if dec:

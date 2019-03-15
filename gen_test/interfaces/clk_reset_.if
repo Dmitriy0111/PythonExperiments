@@ -1,0 +1,5 @@
+__CLK_RESET__
+clk      , wire      , 1 , output ,// {{}}clk
+resetn   , wire      , 1 , output ,// {{}}resetn
+test_i   , test_if_i , 1 , output,// test interface input
+test_o   , test_if_o , 1 , output,// test interface output

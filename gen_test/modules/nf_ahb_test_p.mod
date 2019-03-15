@@ -1,8 +1,8 @@
 __PARAM__
-gpio_w = `NF_GPIO_WIDTH
-R_S = `R_S
-B_S = `B_S
-D_S = `D_S
+gpio_w ,`NF_GPIO_WIDTH
+R_S    ,`R_S
+B_S    ,`B_S
+D_S    ,`D_S
 __PORTS__
 clk_reset.if ,       , _f   ,   ,        , slave  ,clock and reset
 clk_reset.if ,       , _m   ,   ,        , slave  ,clock and reset
